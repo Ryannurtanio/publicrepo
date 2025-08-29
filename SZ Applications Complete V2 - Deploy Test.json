@@ -1,0 +1,3317 @@
+{
+  "name": "SZ Applications Complete V2 - Deploy Test",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2acea027-cbb4-4a97-8a76-ad48e536ffec",
+              "name": "from_address",
+              "value": "={{ $json.from.value[0].address }}",
+              "type": "string"
+            },
+            {
+              "id": "ebd2d913-9220-45a3-aaf8-0acaf7411249",
+              "name": "subject",
+              "value": "={{ $json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "63ee4339-bbd3-4fa8-99be-f48068aea290",
+              "name": "text",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "6530be67-0767-40d8-9cc8-24b4e5ddfca6",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "f2d45fbe-a163-4f43-a0e0-5b39dc32aa85",
+              "name": "html",
+              "value": "={{ $json.html }}",
+              "type": "string"
+            },
+            {
+              "id": "23e08d31-732d-4c10-bc14-8803499b5136",
+              "name": "date",
+              "value": "={{ $json.date }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        368,
+        0
+      ],
+      "id": "4cca40a5-6d92-4e10-ac4b-1cf356f1c956",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1059e764-48de-4c8c-8ebc-84157b256357",
+                    "leftValue": "={{ $json.from_address }}",
+                    "rightValue": "^.*@.*\\.edu\\.au$",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "is .edu.au"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d2167587-2716-4e5b-8ffd-6c5182d32287",
+                    "leftValue": "={{ $json.from_address }}",
+                    "rightValue": "^.*@.*\\.edu\\.au$",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notRegex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "not edu.au"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "45408875-51ed-47d5-90c4-922574815e19",
+      "name": "edu.au identifier"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "cfcf24b4-54c2-4eda-81e2-245ff8e8ab7c",
+                    "leftValue": "={{ $json.from_address }}",
+                    "rightValue": "=^.*@admissions\\.navitas\\.com$",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Taylors College USYD"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        784,
+        224
+      ],
+      "id": "d83c4c16-b9c0-4d5c-aaaa-e5d18aea4e69",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "inputText": "=### Email Subject:\n{{ $json.subject }}\n\n### Email Content : \n{{ $json.text }}\n\n### Backup Email Content : \n{{ $json.html }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "applications",
+              "description": "emails about student's applications. Usually contain a specific student's information. from univesities or other educational institution"
+            },
+            {
+              "category": "marketing",
+              "description": "marketing or promotional emails from univesities or other educational institution"
+            },
+            {
+              "category": "Communication",
+              "description": "Usually a back and forth containing a conversation, asking or reconfirming about something"
+            }
+          ]
+        },
+        "options": {
+          "fallback": "other"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        1072,
+        -176
+      ],
+      "id": "6891a21d-1931-4c5d-ac95-86c0e207d099",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1072,
+        48
+      ],
+      "id": "9f779ba8-4f5d-4359-9cc3-31369f52909b",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "jJv3nkwZvyQN5IaD",
+          "name": "agentic-simdev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Log\n",
+        "height": 256,
+        "width": 182
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        960,
+        336
+      ],
+      "id": "038db223-e448-4c1f-afa4-ff5d31f2f048",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Log\n",
+        "height": 608,
+        "width": 150
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        -16
+      ],
+      "id": "44b3a973-396a-4af9-acaf-f2a9d8deca82",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $json.id }}",
+        "simple": false,
+        "options": {
+          "dataPropertyAttachmentsPrefixName": "attachment_",
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1872,
+        160
+      ],
+      "id": "d3d90a5b-7cb9-483e-abc7-46035188f03d",
+      "name": "Get a message",
+      "webhookId": "07bf2da2-7c6b-47fc-8c56-18a92913ae1c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "gk5O5zFrZlJPOfV3",
+          "name": "AIZONE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=attachment_0 filename :{{ $json.attachment_0 }}\n\nattachment_1 filename :{{ $json.attachment_1 }}\n\nattachment_2 filename :{{ $json.attachment_2 }}\n\nattachment_3 filename :{{ $json.attachment_3 }}\n\nattachment_4 filename :{{ $json.attachment_4 }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are to identify which one is the Letter of Offer, Confirmation of Enrollment (COE), or Conditional Offer based on the filename.\n\nyour output must strictly be \"attachment_x\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2480,
+        160
+      ],
+      "id": "534efc59-1f4d-4edb-a6e9-3e5f922ac699",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "={{ $('AI Agent').item.json.output.Output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        3072,
+        160
+      ],
+      "id": "f003c2af-3d13-4e1c-a87f-09e3559b669e",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"Output\": \"attachment_0\"\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2624,
+        384
+      ],
+      "id": "ff583ffe-f3e9-4d4f-9a33-3aa15cfbe828",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e7beb558-ea6a-48bf-9291-ad91d4fcc848",
+              "name": "attachment_0",
+              "value": "={{ $node[\"Get a message\"].binary.attachment_0.fileName }}",
+              "type": "string"
+            },
+            {
+              "id": "7804f69e-2e06-4777-8324-bd358ed3c9f3",
+              "name": "attachment_1",
+              "value": "={{ $node[\"Get a message\"].binary.attachment_1.fileName }}",
+              "type": "string"
+            },
+            {
+              "id": "1f4b4d97-c066-47c7-ba89-391bfdd71b51",
+              "name": "attachment_2",
+              "value": "={{ $node[\"Get a message\"].binary.attachment_2.fileName }}",
+              "type": "string"
+            },
+            {
+              "id": "7e0b8aa5-047a-4d77-8f1c-b230afd1f145",
+              "name": "attachment_3",
+              "value": "={{ $node[\"Get a message\"].binary.attachment_3.fileName }}",
+              "type": "string"
+            },
+            {
+              "id": "e25aae9a-4512-4c3b-a671-e2cdb7bd66f0",
+              "name": "attachment_4",
+              "value": "={{ $node[\"Get a message\"].binary.attachment_4.fileName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2064,
+        160
+      ],
+      "id": "6c499fd1-a0e8-4609-b962-160c9221a867",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2480,
+        384
+      ],
+      "id": "c7ca111e-51d0-431c-a4a3-5fb58e5b1477",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "jJv3nkwZvyQN5IaD",
+          "name": "agentic-simdev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Log\n",
+        "height": 192,
+        "width": 150
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2224,
+        224
+      ],
+      "id": "8d2470f0-0270-4257-af9a-82d1b4148263",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "applicants",
+          "mode": "list",
+          "cachedResultName": "applicants"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "NamaStudent",
+              "condition": "LIKE",
+              "value": "=%{{ $('Information Extractor1').item.json.output.StudentName }}%"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        4032,
+        160
+      ],
+      "id": "87086410-793d-4153-9438-bfceb5e0ffcb",
+      "name": "Select rows from a table1",
+      "credentials": {
+        "mySql": {
+          "id": "adTWBXCZYAgitnuz",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa942b4e-13de-481a-bf77-aefcd49edbe5",
+              "name": "StudentID",
+              "value": "={{ $('Select rows from a table1').item.json.ID }}",
+              "type": "number"
+            },
+            {
+              "id": "6a0b89b5-d742-45c4-97e2-a9fdf5378126",
+              "name": "School",
+              "value": "={{ $('School Column Verifier').item.json.output.verified_school }}",
+              "type": "string"
+            },
+            {
+              "id": "aaa22e7e-385c-4fe0-ac8b-51fa06f8f895",
+              "name": "Preference",
+              "value": "={{ $json.output.verified_preference }}",
+              "type": "string"
+            },
+            {
+              "id": "5509e1a6-a8ea-4a64-961c-40857fd25712",
+              "name": "SID",
+              "value": "={{ $('Information Extractor1').item.json.output.SID }}",
+              "type": "string"
+            },
+            {
+              "id": "0da19ca6-14b9-4d92-9f7c-8779efd301b8",
+              "name": "StartDate",
+              "value": "={{ $('Information Extractor1').item.json.output.StartDate }}",
+              "type": "string"
+            },
+            {
+              "id": "59e091c4-72ef-4f98-815d-b360b6a6458c",
+              "name": "FinishDate",
+              "value": "={{ $('Information Extractor1').item.json.output.FinishDate }}",
+              "type": "string"
+            },
+            {
+              "id": "1891f05e-183e-4034-a2f8-cccb65d975d5",
+              "name": "TotalTuitionFee",
+              "value": "={{ $('Information Extractor1').item.json.output.TotalTuitionFee }}",
+              "type": "number"
+            },
+            {
+              "id": "9776a812-4610-49cf-8400-fc4f9a689f04",
+              "name": "Email_type",
+              "value": "={{ $('Information Extractor1').item.json.output.Email_type }}",
+              "type": "string"
+            },
+            {
+              "id": "75e38782-a679-48fb-9d2b-42efd747cc01",
+              "name": "date_emailtype",
+              "value": "={{ $('Get a message1').item.json.date.split('T')[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4672,
+        160
+      ],
+      "id": "eebf7ef7-a242-4920-a1ea-908dfcff33a3",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"verified_school\":\"\"}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3888,
+        384
+      ],
+      "id": "8adebd0e-9daa-4748-b647-eeed27e3419a",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT School FROM studyzon_ai.school;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.5,
+      "position": [
+        3760,
+        384
+      ],
+      "id": "c1ebd9f1-ab2a-4d04-97dd-3030248162f7",
+      "name": "Execute a SQL query in MySQL",
+      "credentials": {
+        "mySql": {
+          "id": "adTWBXCZYAgitnuz",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=AI Extracted School Column to search:\n{{ $json.output.School }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are to check and Make Sure that the school name extracted from AI is standardized from the school table in mysql\n\nOutput:\n{\"verified_school\":\"\"}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3680,
+        160
+      ],
+      "id": "f853180c-197f-4734-8b1c-36a33d971051",
+      "name": "School Column Verifier"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Preference extracted from AI:\n{{ $('Information Extractor1').item.json.output.Preference }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are to check and Make Sure that the preference extracted from AI is standardized from the already available applicants table in mysql database for updating (Matching on Preference)\n\nOutput:\n{\"Preference\":\"\"}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        4288,
+        160
+      ],
+      "id": "fed2ece3-aac9-4f91-87e0-3181220cc612",
+      "name": "Preference Column Verifier"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"verified_preference\":\"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4528,
+        384
+      ],
+      "id": "2fb049dd-17ea-44a2-bc3d-9df10f3c0ae5",
+      "name": "Structured Output Parser3"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "Select Preference\n    -- StudentID, School, Preference, SID, StartDate,FinishDate, TotalTuitionFee,Apply,CondOffer, FullOffer,COE\nFROM studyzon_ai.applications\nWHERE StudentID = {{ $json.ID }}\n    -- and School = x",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.5,
+      "position": [
+        4352,
+        384
+      ],
+      "id": "47f704a1-e2cb-46c8-b335-1cfc3a2698eb",
+      "name": "Execute a SQL query in MySQL1",
+      "credentials": {
+        "mySql": {
+          "id": "adTWBXCZYAgitnuz",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE studyzon_ai.applications\nSET \n    SID = '{{ $json.SID }}',\n    StartDate = '{{ $json.StartDate }}',\n    FinishDate = '{{ $json.FinishDate }}',\n    TotalTuitionFee = {{ $json.TotalTuitionFee }},\n    CondOffer = '{{ $json.date_emailtype }}'\nWHERE \n    StudentID = {{ $json.StudentID }}\n    AND School = '{{ $json.School }}'\n    AND Preference = '{{ $json.Preference }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        5168,
+        -64
+      ],
+      "id": "57b3fa15-794a-4355-9123-f50d389027e0",
+      "name": "CondOffer",
+      "credentials": {
+        "mySql": {
+          "id": "adTWBXCZYAgitnuz",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE studyzon_ai.applications\nSET \n    SID = '{{ $json.SID }}',\n    StartDate = '{{ $json.StartDate }}',\n    FinishDate = '{{ $json.FinishDate }}',\n    TotalTuitionFee = {{ $json.TotalTuitionFee }},\n    FullOffer = '{{ $json.date_emailtype }}'\nWHERE \n    StudentID = {{ $json.StudentID }}\n    AND School = '{{ $json.School }}'\n    AND Preference = '{{ $json.Preference }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        5168,
+        160
+      ],
+      "id": "9fcab705-3d5d-4b8c-9f4c-968db3c934d3",
+      "name": "FullOffer",
+      "credentials": {
+        "mySql": {
+          "id": "adTWBXCZYAgitnuz",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE studyzon_ai.applications\nSET \n    SID = '{{ $json.SID }}',\n    StartDate = '{{ $json.StartDate }}',\n    FinishDate = '{{ $json.FinishDate }}',\n    TotalTuitionFee = {{ $json.TotalTuitionFee }},\n    COE = '{{ $json.date_emailtype }}'\nWHERE \n    StudentID = {{ $json.StudentID }}\n    AND School = '{{ $json.School }}'\n    AND Preference = '{{ $json.Preference }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        5168,
+        384
+      ],
+      "id": "9d8de3de-a00d-41c5-9ae9-c753e18106b7",
+      "name": "COE",
+      "credentials": {
+        "mySql": {
+          "id": "adTWBXCZYAgitnuz",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "=### Attachment Content:\n{{ $json.text }}",
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Student Application Data Schema\",\n  \"description\": \"JSON Schema for validating AI agent output in n8n workflow for student application data extraction\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"StudentName\": {\n      \"type\": \"string\",\n      \"description\": \"Student's full name as it appears in the Content, without Mr or Mrs or any Prefixes\",\n      \"minLength\": 0,\n      \"maxLength\": 200\n    },\n    \"School\": {\n      \"type\": \"string\",\n      \"description\": \"Complete name of the educational institution\",\n      \"minLength\": 0,\n      \"maxLength\": 300\n    },\n    \"Preference\": {\n      \"type\": \"string\",\n      \"description\": \"Course, program, or degree title the student is applying for\",\n      \"minLength\": 0,\n      \"maxLength\": 500\n    },\n    \"SID\": {\n      \"type\": \"string\",\n      \"description\": \"Student ID number issued by the institution\",\n      \"minLength\": 0,\n      \"maxLength\": 50\n    },\n    \"StartDate\": {\n      \"type\": \"string\",\n      \"description\": \"Program start date in YYYY-MM-DD format\",\n      \"pattern\": \"^(\\\\d{4}-\\\\d{2}-\\\\d{2}|)$\",\n      \"format\": \"date\"\n    },\n    \"FinishDate\": {\n      \"type\": \"string\",\n      \"description\": \"Program completion date in YYYY-MM-DD format\",\n      \"pattern\": \"^(\\\\d{4}-\\\\d{2}-\\\\d{2}|)$\",\n      \"format\": \"date\"\n    },\n    \"TotalTuitionFee\": {\n      \"type\": \"number\",\n      \"description\": \"Total tuition cost as a numeric value (no currency symbols). If given a range of estimate, pick the lowest in the range\",\n      \"minimum\": 0,\n      \"maximum\": 999999999.99\n    },\n    \"Email_type\": {\n      \"type\": \"string\",\n      \"description\": \"Type of email/application stage\",\n      \"enum\": [\"CondOffer\", \"FullOffer\", \"COE\", \"\"]\n    }\n  },\n  \"required\": [\n    \"StudentName\",\n    \"School\", \n    \"Preference\",\n    \"SID\",\n    \"StartDate\",\n    \"FinishDate\",\n    \"TotalTuitionFee\",\n    \"Email_type\"\n  ],\n  \"additionalProperties\": false,\n  \"examples\": [\n    {\n      \"StudentName\": \"John Smith\",\n      \"School\": \"University of Technology Sydney\",\n      \"Preference\": \"Master of Information Technology\",\n      \"SID\": \"12345678\",\n      \"StartDate\": \"2024-02-01\",\n      \"FinishDate\": \"2025-12-15\",\n      \"TotalTuitionFee\": 45000.00,\n      \"Email_type\": \"FullOffer\"\n    },\n    {\n      \"StudentName\": \"Sarah Johnson\",\n      \"School\": \"Melbourne Institute of Technology\",\n      \"Preference\": \"Bachelor of Computer Science\",\n      \"SID\": \"\",\n      \"StartDate\": \"\",\n      \"FinishDate\": \"\",\n      \"TotalTuitionFee\": 0.0,\n      \"Email_type\": \"Apply\"\n    }\n  ]\n}",
+        "options": {
+          "systemPromptTemplate": "=## Field Guidelines:\n\n### Student Information\n- **StudentName**: Student's full name as it appears in the content. WITHOUT MISS OR MR or ANY PREFIX\n- **School**: Complete name of the educational institution\n- **Preference**: Course, program, or degree title the student is applying for\n- **SID**: Student ID number issued by the institution\n\n### Program Details\n- **StartDate**: Program start date in YYYY-MM-DD format\n- **FinishDate**: Program completion date in YYYY-MM-DD format  \n- **TotalTuitionFee**: Total tuition cost as a numeric value (no currency symbols). If given a range of estimate, pick the lowest in the range (example: Total estimated tuition fee range: AU$145,668 – AU$189,352, AI Will output 145668)\n\n### Email_Type Column Can be one of these 3:\n- CondOffer : Conditional Offer\n- FullOffer : Full Offer\n- COE : Confirmation of Enrollment\n\n## Important Instructions:\n\n1. **Date Format**: All dates must be in YYYY-MM-DD format\n2. **Missing Information**: If any field cannot be found in the text, leave it as an empty string \"\" (or 0.0 for TotalTuitionFee)\n3. **Currency**: Remove currency symbols from TotalTuitionFee, keep only the numeric value\n4. **Output**: Return ONLY the JSON object, no additional text or explanation"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        3280,
+        160
+      ],
+      "id": "b7350402-c832-4f2f-9647-f9e1a74ed9f4",
+      "name": "Information Extractor1",
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3280,
+        384
+      ],
+      "id": "c504b5d4-8b38-41e6-b4b5-0021561a2998",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "jJv3nkwZvyQN5IaD",
+          "name": "agentic-simdev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Email_type }}",
+                    "rightValue": "CondOffer",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "3de0a48d-f2f0-4dac-92e4-6776d1f42705"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CondOffer"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "454f22ac-c0d4-4ccb-a9a5-c50f0310171a",
+                    "leftValue": "={{ $json.Email_type }}",
+                    "rightValue": "FullOffer",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "FullOffer"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e88f7262-06a4-449b-bd41-67a5e7335e6e",
+                    "leftValue": "={{ $json.Email_type }}",
+                    "rightValue": "COE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "COE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        4864,
+        144
+      ],
+      "id": "67b37b14-8806-4e06-9a7d-ef4b4e1312e0",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3600,
+        384
+      ],
+      "id": "8f3baa61-7e74-4635-8644-a6965709d38f",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "jJv3nkwZvyQN5IaD",
+          "name": "agentic-simdev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Log\n",
+        "height": 240,
+        "width": 742
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        96
+      ],
+      "id": "f1c74a64-2c7b-4007-aa84-39f9a0df9cc4",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $('Get a message').item.json.id }}",
+        "simple": false,
+        "options": {
+          "dataPropertyAttachmentsPrefixName": "attachment_",
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2848,
+        160
+      ],
+      "id": "6392cde6-64fb-43c5-806c-4ae980fa9c40",
+      "name": "Get a message1",
+      "webhookId": "b3415e41-9a5f-4f38-9248-c1fb75321f76",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "gk5O5zFrZlJPOfV3",
+          "name": "AIZONE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Log\n",
+        "height": 688,
+        "width": 230
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4800,
+        -16
+      ],
+      "id": "6f1171c7-42d4-49c7-8dae-0a2e62d30000",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        4160,
+        384
+      ],
+      "id": "574ba157-fd9c-43df-bd47-7aa507d91960",
+      "name": "OpenAI Chat Model6",
+      "credentials": {
+        "openAiApi": {
+          "id": "jJv3nkwZvyQN5IaD",
+          "name": "agentic-simdev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email From": "={{ $json.from_address }}",
+            "Email Subject": "={{ $json.subject }}",
+            "Time": "={{ $('Edit Fields').item.json.date }}",
+            "Categorized As": "Not Processed by AI (Not edu.au / Exceptions)",
+            "Email ID": "={{ $json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Email ID",
+              "displayName": "Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply / FO,CO,COE",
+              "displayName": "Apply / FO,CO,COE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        992,
+        416
+      ],
+      "id": "0c68cdd5-9423-49b6-b01d-1a80fae4b540",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email From": "={{ $json.from_address }}",
+            "Email Subject": "={{ $json.subject }}",
+            "Time": "={{ $('Edit Fields').item.json.date }}",
+            "Categorized As": "Not Processed by AI (Labeled as Marketing Email by AI)",
+            "Email ID": "={{ $json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Email ID",
+              "displayName": "Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply / FO,CO,COE",
+              "displayName": "Apply / FO,CO,COE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1424,
+        64
+      ],
+      "id": "1941bf08-2967-4047-94d8-bc17fee8ed1a",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email From": "={{ $json.from_address }}",
+            "Email Subject": "={{ $json.subject }}",
+            "Time": "={{ $('Edit Fields').item.json.date }}",
+            "Categorized As": "Not Processed by AI (Labeled as Communication Email by AI)"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1424,
+        240
+      ],
+      "id": "24da9a8d-ba1f-460a-9ecc-2e18a410b976",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email From": "={{ $json.from_address }}",
+            "Email Subject": "={{ $json.subject }}",
+            "Time": "={{ $('Edit Fields').item.json.date }}",
+            "Categorized As": "Not Processed by AI (Labeled as Others/ Unrelated to Applications by AI)"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1424,
+        448
+      ],
+      "id": "3d2c4dd8-3004-4d59-b4b9-a90bbc326d34",
+      "name": "Append row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email ID": "={{ $('Edit Fields').item.json.id }}",
+            "Attachment Processed": "={{ $('AI Agent').item.json.output.Output }}"
+          },
+          "matchingColumns": [
+            "Email ID"
+          ],
+          "schema": [
+            {
+              "id": "Email ID",
+              "displayName": "Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Apply / FO,CO,COE",
+              "displayName": "Apply / FO,CO,COE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3008,
+        384
+      ],
+      "id": "8f4473fe-440a-4058-89f6-6a3490d7b2bb",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email ID": "={{ $('Edit Fields').item.json.id }}",
+            "Info Extracted": "=Student Name: {{ $('Select rows from a table1').item.json.NamaStudent }}\nStudentID: {{ $json.StudentID }}\nSchool: {{ $json.School }}\nPreference: {{ $json.Preference }}\nSID: {{ $json.SID }}\nStartDate: {{ $json.StartDate }}\nFinishDate: {{ $json.FinishDate }}\nTotalTuitionFee: {{ $json.TotalTuitionFee }}\nEmail_type: {{ $json.Email_type }}\nDate_{{ $json.Email_type }}: {{ $json.date_emailtype }}",
+            "Apply / FO,CO,COE": "={{ $json.Email_type }}"
+          },
+          "matchingColumns": [
+            "Email ID"
+          ],
+          "schema": [
+            {
+              "id": "Email ID",
+              "displayName": "Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Apply / FO,CO,COE",
+              "displayName": "Apply / FO,CO,COE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4864,
+        384
+      ],
+      "id": "79705ee6-3a2d-414f-b722-7cf741f72501",
+      "name": "Append or update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Add Classifier for separating Apply w/ COE,FO,and CO\n",
+        "height": 128,
+        "width": 278
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        -528
+      ],
+      "id": "b9534257-809f-41c6-9fe3-e4ef5e649233",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "inputText": "=from: {{ $json.from_address }}\n\nemail subject : {{ $json.subject }}\n\nemail content: {{ $json.text }}\n\nemail content backup: {{ $json.html }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Apply",
+              "description": "Contain the message of a student has just applied to a university, Usually the subject of the email has thank you for applying/ your application have been submitted"
+            },
+            {
+              "category": "CO,FO, COE",
+              "description": "Contains Conditional Offer, Full Offer, or Certificate of Enrollment"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        1488,
+        -368
+      ],
+      "id": "f80e54d2-6895-454c-9b37-b01dd0164a80",
+      "name": "Text Classifier1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1488,
+        -192
+      ],
+      "id": "95fa2c3b-e596-41d1-87c4-167d356351a0",
+      "name": "OpenAI Chat Model4",
+      "credentials": {
+        "openAiApi": {
+          "id": "jJv3nkwZvyQN5IaD",
+          "name": "agentic-simdev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "=\n\n### Email Content :\n{{ $('Get a message2').item.json.html }}\n\n\n### Attachment Content:\n{{ $json.text }}\n\n### Sent to:\n{{ $('Get a message2').item.json.to.value[0].address }}\n{{ $('Get a message2').item.json.to.text }}",
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n\"StudentName\": \"Khaerani\",\n\"School\": \"The University of Melbourne\",\n\"Preference\": \"Master of Applied Psychology\",\n\"SID\": \"1822287\",\n\"StartDate\": \"2025-07-01\",\n\"FinishDate\": \"2026-11-30\",\n\"TotalTuitionFee\": 36000,\n\"Email_type\": \"Apply\"\n}",
+        "options": {
+          "systemPromptTemplate": "=## Field Guidelines:\n\n### Student Information\n- **StudentName**: Student's FULL NAME as it appears in the content. WITHOUT MISS OR MR or ANY PREFIX. Can usually get from email's sent address. MUST BE FULL NAME.\n\n- **School**: Complete name of the educational institution\n- **Preference**: Course, program, or degree title the student is applying for\n- **SID**: Student ID number issued by the institution\n\n### Program Details\n- **StartDate**: Program start date in YYYY-MM-DD format\n- **FinishDate**: Program completion date in YYYY-MM-DD format  \n- **TotalTuitionFee**: Total tuition cost as a numeric value (no currency symbols), null if nothing fits\n\n### Email_Type Column Can be this:\n- Apply\n\n## Important Instructions:\n\n1. **Date Format**: All dates must be in YYYY-MM-DD format\n2. **Missing Information**: If any field cannot be found in the text, leave it as an empty string \"\" (or 0.0 for TotalTuitionFee)\n3. **Currency**: Remove currency symbols from TotalTuitionFee, keep only the numeric value\n4. **Output**: Return ONLY the JSON object, no additional text or explanation"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        2336,
+        -704
+      ],
+      "id": "78a73d40-3a4a-4d0e-9020-ef23e0766813",
+      "name": "Information Extractor2",
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2336,
+        -496
+      ],
+      "id": "bf7e55c7-7c45-42aa-82e4-37cd7df725f0",
+      "name": "OpenAI Chat Model5",
+      "credentials": {
+        "openAiApi": {
+          "id": "jJv3nkwZvyQN5IaD",
+          "name": "agentic-simdev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $json.id }}",
+        "simple": false,
+        "options": {
+          "dataPropertyAttachmentsPrefixName": "attachment_",
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1888,
+        -704
+      ],
+      "id": "4c6cf70a-0d0f-4291-a036-37f171a69303",
+      "name": "Get a message2",
+      "webhookId": "b0f7b819-9111-4e9f-b31a-0dff414288b1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "gk5O5zFrZlJPOfV3",
+          "name": "AIZONE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "attachment_0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        2096,
+        -704
+      ],
+      "id": "86bd4222-e843-4dfe-9db5-96d55b44a998",
+      "name": "Extract from File1",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"verified_school\":\"\"}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2928,
+        -480
+      ],
+      "id": "48537a01-c8bc-4e9a-b225-a674d871f4f4",
+      "name": "Structured Output Parser4"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT School FROM studyzon_ai.school;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.5,
+      "position": [
+        2800,
+        -480
+      ],
+      "id": "8382a8c5-b231-48df-84a4-3774de1c1aea",
+      "name": "Execute a SQL query in MySQL2",
+      "credentials": {
+        "mySql": {
+          "id": "adTWBXCZYAgitnuz",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=AI Extracted School Column to search:\n{{ $json.output.School }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are to check and Make Sure that the school name extracted from AI is standardized from the school table in mysql\n\nOutput:\n{\"verified_school\":\"\"}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2736,
+        -704
+      ],
+      "id": "ecda2be4-7020-47fd-a0de-84ed03054c2f",
+      "name": "School Column Verifier1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2640,
+        -480
+      ],
+      "id": "4f7d8f6d-b8ed-4adb-9d72-03f1469ea7ac",
+      "name": "OpenAI Chat Model7",
+      "credentials": {
+        "openAiApi": {
+          "id": "jJv3nkwZvyQN5IaD",
+          "name": "agentic-simdev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"ID\":\"\",\n  \"NamaStudent\":\"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3888,
+        -416
+      ],
+      "id": "3aa0ffe1-0921-478b-9262-61123a82276a",
+      "name": "Structured Output Parser5"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3568,
+        -416
+      ],
+      "id": "3b1d4aa9-afca-4dd1-9bbd-fda56beb7f6f",
+      "name": "OpenAI Chat Model8",
+      "credentials": {
+        "openAiApi": {
+          "id": "jJv3nkwZvyQN5IaD",
+          "name": "agentic-simdev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Email to:{{ $('Get a message2').item.json.to.value[0].address }}\nEmail cc: {{ $('Get a message2').item.json.cc.value[0].address }}\n### email:\n{{ $('Get a message2').item.json.html }}\n\n\n\n### attachment:\n{{ $('Extract from File1').item.json.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are to get student ID from their name\n\nyou will try to get their name from email and/or attachments\n\n### Tools input is sql query, follow this format: \n\nSELECT ID,NamaStudent FROM studyzon_ai.applicants\nwhere NamaStudent like \"%StudentName%\";\n\n### Instructions:\n\nTry with only surname first, because the tools you have is sql LIKE operator\n\nIf return multiple outputs from the sql query, try to filter thru it and choose the correct one based from the given context\n\nTry multiple times to get it from the database\n\nif no match, return null\n\nOutput:\n{\"ID\":\"\",\n\"NamaStudent:\"\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3456,
+        -704
+      ],
+      "id": "9e451737-dc9e-4f38-8bd7-7e6b21627c2d",
+      "name": "Dynamic ID Finder"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get StudentID given a student's name",
+        "operation": "executeQuery",
+        "query": "{{ $fromAI(\"query\") }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.5,
+      "position": [
+        3728,
+        -416
+      ],
+      "id": "bc811e59-e51e-4aa5-b5c2-f2eb960e327e",
+      "name": "Execute a SQL query in MySQL3",
+      "credentials": {
+        "mySql": {
+          "id": "adTWBXCZYAgitnuz",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9789ad3d-5120-480f-8f43-6927a0d77c6d",
+              "name": "ID",
+              "value": "={{ $json.output.ID || $json.ID }}",
+              "type": "string"
+            },
+            {
+              "id": "38dd9ab6-04ad-44b0-b785-f552c11669bf",
+              "name": "School",
+              "value": "={{ $('School Column Verifier1').item.json.output.verified_school }}",
+              "type": "string"
+            },
+            {
+              "id": "9ee522f9-b05a-41a3-8f4f-ef881e12163b",
+              "name": "SID",
+              "value": "={{ $('Information Extractor2').item.json.output.SID }}",
+              "type": "string"
+            },
+            {
+              "id": "a00e7375-8724-4d5a-bec0-33605e81a044",
+              "name": "Student Name",
+              "value": "={{ $json.output.NamaStudent }}",
+              "type": "string"
+            },
+            {
+              "id": "a69600cd-bc9b-46d2-8aa1-2959dbfa4e78",
+              "name": "Preference",
+              "value": "={{ $('Information Extractor2').item.json.output.Preference }}",
+              "type": "string"
+            },
+            {
+              "id": "2eccde5b-e562-4d17-b0be-6e342508eb25",
+              "name": "Apply",
+              "value": "={{ $('Get a message2').item.json.date.split('T')[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4512,
+        -720
+      ],
+      "id": "76926b7b-8c8a-4d2e-9a1f-183a18052222",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.ID }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "6076f0b7-4790-42dc-8dfe-caea9b13ec0e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "exist"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "93e30592-671a-44ef-be98-f3a77b627d0c",
+                    "leftValue": "={{ $json.output.ID }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "empty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "doesnt exist"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        4176,
+        -672
+      ],
+      "id": "caa6d89d-b744-4a69-b3f6-6a990e2725ac",
+      "name": "Switch3"
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "applications",
+          "mode": "list",
+          "cachedResultName": "applications"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "StudentID",
+              "value": "={{ $json.ID }}"
+            },
+            {
+              "column": "School",
+              "value": "={{ $json.School }}"
+            },
+            {
+              "column": "Preference",
+              "value": "={{ $json.Preference }}"
+            },
+            {
+              "column": "SID",
+              "value": "={{ $json.SID }}"
+            },
+            {
+              "column": "Apply",
+              "value": "={{ $json.Apply }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        4864,
+        -720
+      ],
+      "id": "b5c6580a-825d-49f4-ab66-b4fc5ac5c592",
+      "name": "Insert rows in a table",
+      "credentials": {
+        "mySql": {
+          "id": "adTWBXCZYAgitnuz",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email ID": "={{ $('Get a message2').item.json.id }}",
+            "Info Extracted": "=Student Name: {{ $json['Student Name'] }}\nStudentID: {{ $json.ID }}\nSchool: {{ $json.School }}\nPreference: {{ $json.Preference }}\nSID: {{ $json.SID }}\nApply : {{ $json.Apply }}"
+          },
+          "matchingColumns": [
+            "Email ID"
+          ],
+          "schema": [
+            {
+              "id": "Email ID",
+              "displayName": "Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Apply / FO,CO,COE",
+              "displayName": "Apply / FO,CO,COE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4752,
+        -512
+      ],
+      "id": "bed9a003-9a93-47d6-a8ab-5635c9dcb775",
+      "name": "Append or update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email From": "={{ $('Edit Fields').item.json.from_address }}",
+            "Email Subject": "={{ $('Edit Fields').item.json.subject }}",
+            "Time": "={{ $('Get a message2').item.json.date }}",
+            "Categorized As": "Processed by AI (Labeled as Apply)",
+            "Email ID": "={{ $('Edit Fields').item.json.id }}",
+            "Apply / FO,CO,COE": "Apply"
+          },
+          "matchingColumns": [
+            "Email ID"
+          ],
+          "schema": [
+            {
+              "id": "Email ID",
+              "displayName": "Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply / FO,CO,COE",
+              "displayName": "Apply / FO,CO,COE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2048,
+        -496
+      ],
+      "id": "8a125329-3165-4fef-90c9-931199a67a33",
+      "name": "Append or update row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email ID": "={{ $('Get a message2').item.json.id }}",
+            "Info Extracted": "=Applicants not found!"
+          },
+          "matchingColumns": [
+            "Email ID"
+          ],
+          "schema": [
+            {
+              "id": "Email ID",
+              "displayName": "Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Apply / FO,CO,COE",
+              "displayName": "Apply / FO,CO,COE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4400,
+        -448
+      ],
+      "id": "9547f50c-b249-477d-bc98-b76b97bdf206",
+      "name": "Append or update row in sheet4",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY",
+          "mode": "list",
+          "cachedResultName": "Routing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1609095506,
+          "mode": "list",
+          "cachedResultName": "Logging",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NdVxA57j0Yus2MKw3KPXEnqbF814jZo8BI6cwHuklDY/edit#gid=1609095506"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email From": "={{ $('Edit Fields').item.json.from_address }}",
+            "Email Subject": "={{ $('Edit Fields').item.json.subject }}",
+            "Time": "={{ $('Get a message').item.json.date }}",
+            "Categorized As": "Processed by AI (Labeled as FO,COE, or CO because have attachment(s)))",
+            "Attachment Files": "=attachment_0: {{ $json.attachment_0 }}\nattachment_1: {{ $json.attachment_1 }}\nattachment_2: {{ $json.attachment_2 }}\nattachment_3: {{ $json.attachment_3 }}\nattachment_4: {{ $json.attachment_4 }}\n",
+            "Email ID": "={{ $('Edit Fields').item.json.id }}"
+          },
+          "matchingColumns": [
+            "Email ID"
+          ],
+          "schema": [
+            {
+              "id": "Email ID",
+              "displayName": "Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email From",
+              "displayName": "Email From",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Categorized As",
+              "displayName": "Categorized As",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply / FO,CO,COE",
+              "displayName": "Apply / FO,CO,COE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Attachment Files",
+              "displayName": "Attachment Files",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Attachment Processed",
+              "displayName": "Attachment Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Info Extracted",
+              "displayName": "Info Extracted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2256,
+        304
+      ],
+      "id": "0dcb24b2-64b7-4453-8516-46a2ba964584",
+      "name": "Append or update row in sheet5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jEOavHY03gpeo2gc",
+          "name": "angeliateddy15"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        192,
+        0
+      ],
+      "id": "7615f59e-13ec-4fb7-9c09-2aceacc1caa2",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "gk5O5zFrZlJPOfV3",
+          "name": "AIZONE"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "edu.au identifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "edu.au identifier": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a message": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Get a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table1": {
+      "main": [
+        [
+          {
+            "node": "Preference Column Verifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "School Column Verifier",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query in MySQL": {
+      "ai_tool": [
+        [
+          {
+            "node": "School Column Verifier",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "School Column Verifier": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preference Column Verifier": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Preference Column Verifier",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query in MySQL1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Preference Column Verifier",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor1": {
+      "main": [
+        [
+          {
+            "node": "School Column Verifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [],
+        [],
+        []
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "School Column Verifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a message1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Preference Column Verifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier1": {
+      "main": [
+        [
+          {
+            "node": "Get a message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a message2": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Append or update row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser4": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "School Column Verifier1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query in MySQL2": {
+      "ai_tool": [
+        [
+          {
+            "node": "School Column Verifier1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "School Column Verifier1": {
+      "main": [
+        [
+          {
+            "node": "Dynamic ID Finder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "School Column Verifier1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor2": {
+      "main": [
+        [
+          {
+            "node": "School Column Verifier1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser5": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Dynamic ID Finder",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Dynamic ID Finder",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query in MySQL3": {
+      "ai_tool": [
+        [
+          {
+            "node": "Dynamic ID Finder",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dynamic ID Finder": {
+      "main": [
+        [
+          {
+            "node": "Switch3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append or update row in sheet4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "88c1847b-f51a-4c6e-b06d-381356db584c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "444511b00973ebaf5dc9e7ecb40f72dbff2610c75a0d704f20f2ba537f68e6dc"
+  },
+  "id": "lXnZNJ6WxbAKG2X3",
+  "tags": []
+}
